@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   experimental:{
     appDir: true,
-    allowFutureImage: true
+    
   },
   images: {
     domains: ["firebasestorage.googleapis.com"]
