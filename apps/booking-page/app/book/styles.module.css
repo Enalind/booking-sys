@@ -1,0 +1,25 @@
+.imageWrapper{
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+}
+.barberWrapper{
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+}
+.profileWrapper{
+    display: flex;
+    margin: 20px;
+}
+.profileWrapper p{
+    margin: auto 20px auto;
+    font-size: 50px;
+}
+.image{
+    border-radius: 50%;
+}

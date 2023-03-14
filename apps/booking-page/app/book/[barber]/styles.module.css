@@ -1,0 +1,30 @@
+.treatmentWrapper{
+    
+    display: flex;
+    
+    gap: 20px;
+    background: linear-gradient(270deg, var(--primary-color), var(--secondary-color));
+    flex-direction: column;
+    width: fit-content;
+    margin-left: 20px;
+    padding: 10px;
+    border-radius: 20px;
+}
+
+.treatmentWrapper p{
+    margin: auto 20px auto;
+}
+.infoWrapper{
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    text-align: center;
+}
+.wrapper{
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    width: auto;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
