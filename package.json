@@ -21,7 +21,8 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
-    "firebase": "^9.17.2"
+    "firebase": "^9.17.2",
+    "moment": "^2.29.4"
   },
   "packageManager": "npm@9.5.1"
 }
