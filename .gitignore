@@ -12,7 +12,9 @@ coverage
 .next/
 out/
 build
-
+firebase.json
+firestore.indexes.json
+firestore.rules
 # misc
 .DS_Store
 *.pem
