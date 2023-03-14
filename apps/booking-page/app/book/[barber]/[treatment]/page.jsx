@@ -35,10 +35,10 @@ function getFreeTimes(startEnd, breaks, treatmentTime){
     
     while(initialTime.isBefore(stopTime)){
         var boolArray = []
-        var range = extendedMoment.range(initialTime, initialTime.clone().add(treatmentTime-1, "minutes"))
+        var range = extendedMoment.range(initialTime, initialTime.clone().add(treatmentTime, "minutes").subtract(1, "milliseconds"))
         breaks.forEach(singleBreak => {
             const breakRange = extendedMoment.range(singleBreak[0], singleBreak[1])
-            console.log(breakRange, range, range.overlaps(breakRange, {adjacent: false}))
+            
             boolArray.push(range.overlaps(breakRange, {adjacent: false}))
         })
         if(boolArray.every(e => e === false)){
@@ -49,15 +49,43 @@ function getFreeTimes(startEnd, breaks, treatmentTime){
     }
     return availiableTimes
 }
+function getAllTimes(startEnd, increment){
+    var initialTime = moment(startEnd.Start, "HH:mm")
+    var stopTime = moment(startEnd.End, "HH:mm")
+    var times = []
+    while (initialTime.isSameOrBefore(stopTime)){
+        times.push(initialTime.clone())
+        initialTime.add(increment, "minutes")
+    }
+    return times
+}
 async function getTreatmentTime(barber, treatment){
     const treatmentDocSnap = await getDoc(doc(firestore, `Calendars/${barber}/Treatments/${treatment}`))
     return treatmentDocSnap.data()["Time"]
 }
-export default async function Calendar({params}){
-    var startEnd = await getStartEnd(params.barber, moment(moment().subtract(1, "days")).format("YYYYMMDD"))
-    var breaks = await getBreaks(params.barber, moment(moment().subtract(1, "days")).format("YYYYMMDD"))
-    var treatmentTime = await getTreatmentTime(params.barber, params.treatment)
+async function getTimes(barber, treatment, date){
+    var startEnd = await getStartEnd(barber, date)
+    var breaks = await getBreaks(barber, date)
+    var treatmentTime = await getTreatmentTime(barber, treatment)
     var freeTimes = getFreeTimes(startEnd, breaks, treatmentTime)
-    console.log(freeTimes.map(freeTime => freeTime.format("HH:mm")))
-    return<p>Hello</p>
+    return {freeTimes: freeTimes.map(freeTime => freeTime.format("HH:mm")), startEnd: startEnd}
+}
+export default async function Calendar({params}){
+    var date = moment(moment().subtract(1, "days")).format("YYYYMMDD")
+    const timesObj = await getTimes(params.barber, params.treatment, date, 30)
+    const freeTimes = timesObj["freeTimes"]
+    const allTimes = getAllTimes(timesObj.startEnd, 30).map(e => e.format("HH:mm"))
+    console.log(freeTimes, allTimes)
+    return <div className={styles.pageWrapper} style={{gridTemplateRows: Array.of(allTimes.length).fill("auto").join(" ")}}>
+        {allTimes.map((time, i) => {
+            if(freeTimes.indexOf(time) === -1){
+                return <div className={styles.box} style={{backgroundColor: "red"}}>{time.toString()}</div>
+            }
+            else{
+                return <div className={styles.box} style={{backgroundColor: "green"}}>{time.toString()}</div>
+            }
+            
+        }) }
+
+    </div>
 }
